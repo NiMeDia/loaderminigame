@@ -1,0 +1,10 @@
+{
+  "name": "loaderminigame",
+  "version": "0.0.1",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-umd": "~2.4.0"
+  }
+}

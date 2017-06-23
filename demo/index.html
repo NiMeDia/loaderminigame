@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="/loaderminigame/demo/jquery.js"></script>
+        <script src="/loaderminigame/dist/loaderminigame.js"></script>
+    </head>
+    <body>
+        <style>
+            .loaderminigame_loader {
+                border: 16px solid #444;  Light grey;
+                /*border-top: 16px solid #3498db;  Blue */
+                border-radius: 50%;
+                width: 120px;
+                height: 120px;
+                animation: spin 2s linear infinite;
+            }
+            .loaderminigame_loader_n{
+                border: 16px solid #AAA;
+                border-top: 16px solid #3498db;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
+        <div class="loader"><div class="loaderminigame_loader"></div></div>
+        <script>
+            $(document).ready(function() {
+                $('.loader').loaderminigame({
+                    foo: 'bar'
+                });
+            });
+        </script>
+    </body>
+</html>
