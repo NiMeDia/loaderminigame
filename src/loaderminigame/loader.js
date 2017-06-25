@@ -1,40 +1,50 @@
-function Loader(parent, config, borders, scale) {
-    this.element = $('<div class="loaderminigame_loader"></div>');
-    this.config = config || {};
-    this.borderSize = config.borderSize || "4px";
-    this.borderColor = config.borderColor || "#3498db";
-    this.borderBackgroundColor = config.borderBackgroundColor || "transparent";
-    this.width = config.baseWidth || 20;
-    this.height = config.baseHeight || 20;
+function Loader(parent, config, borders, scale, animationDuration, animationTiming) {
+    this.config = $.extend({
+        borderSize: "4px",
+        borderColor: "#666",
+        borderBackgroundColor: "transparent",
+        baseWidth: 20,
+        baseHeight: 20,
+    }, config);
+
+    this.element = null;
+
     this.scale = scale|| 1.0;
-    this.borders = borders || ['NE'];
+    this.borders = borders || ['NE', 'SE', 'SW'];
+    this.animationDuration = animationDuration || (Math.random() * (3 - 1) + 1)+"s";
+    //animation-timing-function: linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|steps(int,start|end)|cubic-bezier(n,n,n,n)|initial|inherit;
+    this.animationTiming = animationTiming || 'linear';
+    this.animations = ['loaderminigame_spin_reversed','loaderminigame_spin'];
     this.blockedRanges = [];
     
     this.__initialize = function() {
+        this.element = $('<div class="loaderminigame_loader"></div>');
         this.element.hide();
         this.element.css("position", 'absolute');
         this.element.css("top", '50%');
         this.element.css("left", '50%');
-        this.element.css("border", this.borderSize + " solid " + this.borderBackgroundColor);
+        this.element.css("border", this.config.borderSize + " solid " + this.config.borderBackgroundColor);
         this.element.css("border-radius", '50%');
-        this.element.css("width", this.width*scale);
-        this.element.css("height", this.height*scale);
+        this.element.css("width", this.config.baseWidth*scale);
+        this.element.css("height", this.config.baseHeight*scale);
+        this.element.css("transform", 'translate(-50%, -50%)');
+        this.element.css("animation", this.animations[Math.floor(Math.random()*this.animations.length)] + ' ' + this.animationDuration + ' ' + this.animationTiming + ' infinite');
         for(var x = 0; x < this.borders.length; x++) {
             switch(this.borders[x]) {
                 case 'NE':
-                    this.element.css("border-top", this.borderSize + " solid " + this.borderColor);
+                    this.element.css("border-top", this.config.borderSize + " solid " + this.config.borderColor);
                     this.blockedRanges.push([0, 90]);
                     break;
                 case 'SE':
-                    this.element.css("border-right", this.borderSize + " solid " + this.borderColor);
+                    this.element.css("border-right", this.config.borderSize + " solid " + this.config.borderColor);
                     this.blockedRanges.push([90, 180]);
                     break;
                 case 'SW':
-                    this.element.css("border-bottom", this.borderSize + " solid " + this.borderColor);
+                    this.element.css("border-bottom", this.config.borderSize + " solid " + this.config.borderColor);
                     this.blockedRanges.push([180, 270]);
                     break;
                 case 'NW':
-                    this.element.css("border-left", this.borderSize + " solid " + this.borderColor);
+                    this.element.css("border-left", this.config.borderSize + " solid " + this.config.borderColor);
                     this.blockedRanges.push([270, 360]);
                     break;
             }
@@ -82,6 +92,26 @@ function Loader(parent, config, borders, scale) {
             }
         }
         return true;
+    };
+
+    this.pause = function() {
+        this.element.css('-webkit-animation-play-state', 'paused');
+        this.element.css('-moz-animation-play-state', 'paused');
+        this.element.css('-ms-animation-play-state', 'paused');
+        this.element.css('-o-animation-play-state', 'paused');
+        this.element.css('animation-play-state', 'paused');
+    };
+
+    this.resume = function() {
+        this.element.css('-webkit-animation-play-state', 'running');
+        this.element.css('-moz-animation-play-state', 'running');
+        this.element.css('-ms-animation-play-state', 'running');
+        this.element.css('-o-animation-play-state', 'running');
+        this.element.css('animation-play-state', 'running');
+    };
+
+    this.destroy = function() {
+        this.element.remove();
     };
 
     /**

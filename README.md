@@ -8,6 +8,9 @@ $(document).ready(function() {
     $('.my_loader_class').loaderminigame();
 });
 ```
+## Known Issues
+Currently the loader can only be applied to parent elements with position relative, absolute or fixed.
+However if this requirement is not fulfilled, position relative will be automatically applied to the parent element.
 
 ## Contributing
 
