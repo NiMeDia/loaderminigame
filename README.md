@@ -11,13 +11,15 @@ $(document).ready(function() {
 
 ## Contributing
 
+Feel free to contribute to this project, you can simply built with grunt:
+```shell
+$ grunt build
+```
+There is also a watch task which builds continuously on changes in the /src directory:
 ```shell
 $ grunt watch
 ```
 
-```shell
-$ grunt build
-```
 
 ## Release History
 
