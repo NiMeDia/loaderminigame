@@ -1,5 +1,5 @@
-# Jquery Loader Minigame
-HTML5 / CSS3 loading animation minigame.
+# Loading-Animation-Minigame
+HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 
 ## Getting Started
 
