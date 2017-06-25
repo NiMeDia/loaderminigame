@@ -9,7 +9,7 @@ $(document).ready(function() {
 });
 ```
 
-##Contributing
+## Contributing
 
 ```shell
 $ grunt watch
@@ -23,5 +23,5 @@ $ grunt build
 
  * 2017-06-20   v0.0.0   -
 
-##License
+## License
 MIT
