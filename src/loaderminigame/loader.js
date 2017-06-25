@@ -69,7 +69,7 @@ function Loader(parent, config, borders, scale, animationDuration, animationTimi
             if(blockRightAngle >= 360) {
                 blockRightAngle = blockRightAngle - 360;
             }
-            console.log("blockLeftAngle: " + blockLeftAngle, "blockRightAngle: " + blockRightAngle, "passableFromAngle: " + passableFromAngle)
+//            console.log("blockLeftAngle: " + blockLeftAngle, "blockRightAngle: " + blockRightAngle, "passableFromAngle: " + passableFromAngle)
             if(passableFromAngle >= blockLeftAngle) {
                 if(blockLeftAngle > blockRightAngle) {
                     //happens if blockRightAngle is >360 and restarts with 0,

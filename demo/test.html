@@ -23,10 +23,10 @@
         <div class="loader_test_2" id="byId" style="height:200px; background: #00f">lorem ipsum...</div>
         <script>
             $(document).ready(function() {
-                $('.loader_test').loaderminigame();
                 $('.loader_test').loaderminigame({
                     foo: 'bar'
-                }).start().stop();
+                }).start().stop().destroy();
+                $('.loader_test').loaderminigame();
 
                 //standalone usage
                 new loaderminigame(document.getElementById('byId'), {});

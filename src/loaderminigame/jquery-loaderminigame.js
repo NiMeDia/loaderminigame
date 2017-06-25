@@ -15,6 +15,14 @@ $.fn.loaderminigame = function (config) {
             });
             return plugin;
         },
+        destroy: function () {
+            $jq.each(function () {
+                var _this = this;
+                _this._loadergameInstance.destroy();
+                _this._loadergameInstance = undefined;
+            });
+            return plugin;
+        },
         init: function () {
             $jq.each(function () {
                 var _this = this;

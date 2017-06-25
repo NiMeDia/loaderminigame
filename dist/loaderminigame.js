@@ -86,7 +86,7 @@ function Loader(parent, config, borders, scale, animationDuration, animationTimi
             if(blockRightAngle >= 360) {
                 blockRightAngle = blockRightAngle - 360;
             }
-            console.log("blockLeftAngle: " + blockLeftAngle, "blockRightAngle: " + blockRightAngle, "passableFromAngle: " + passableFromAngle)
+//            console.log("blockLeftAngle: " + blockLeftAngle, "blockRightAngle: " + blockRightAngle, "passableFromAngle: " + passableFromAngle)
             if(passableFromAngle >= blockLeftAngle) {
                 if(blockLeftAngle > blockRightAngle) {
                     //happens if blockRightAngle is >360 and restarts with 0,
@@ -184,6 +184,7 @@ function LoaderMiniGame(parent, config) {
     }, config);
     
     var self = this;
+    this.parent = null;
     this.element = null;
     this.winPoint = null;
     this.mousePoint = null;
@@ -194,7 +195,8 @@ function LoaderMiniGame(parent, config) {
             console.log('already instanced, returning the loadergame instance');
             return parent[0].loaderminigameInstance;
         }
-        
+        this.parent = parent;
+
         if($('#loaderminigame_css_injection').length === 0){
             $('body').append('<div id="loaderminigame_css_injection"><style>' +
                 '@keyframes loaderminigame_spin {' +
@@ -376,6 +378,10 @@ function LoaderMiniGame(parent, config) {
             var loader = self.loaders[x];
             loader.pause();
         }
+    };
+    this.destroy = function() {
+        this.parent[0].loaderminigameInstance = undefined;
+        this.element.remove();
     };
 
     //ensure we only bind on 1 single element in this class
