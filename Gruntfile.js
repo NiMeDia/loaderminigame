@@ -29,28 +29,28 @@ module.exports = function (grunt) {
 //            },
         },
         umd: {
-            all: {
-                options: {
-                    src: 'dist/concat-standalone.js',
-                    dest: 'dist/loaderminigame.js', // optional, if missing the src will be used
-
-                    // optional, a template from templates subdir
-                    // can be specified by name (e.g. 'umd'); if missing, the templates/umd.hbs
-                    // file will be used from [libumd](https://github.com/bebraw/libumd)
-//            template: 'path/to/template.hbs',
-
-                    objectToExport: 'LoaderMiniGame', // optional, internal object that will be exported
-                    amdModuleId: 'loaderminigame', // optional, if missing the AMD module will be anonymous
-                    globalAlias: 'loaderminigame', // optional, changes the name of the global variable
-
-                    deps: {// optional, `default` is used as a fallback for rest!
-                        'default': ['$'],
-                        amd: ['jquery'],
-                        cjs: ['jquery'],
-                        global: ['jQuery']
-                    }
-                }
-            },
+//            all: {
+//                options: {
+//                    src: 'dist/concat-standalone.js',
+//                    dest: 'dist/loaderminigame.js', // optional, if missing the src will be used
+//
+//                    // optional, a template from templates subdir
+//                    // can be specified by name (e.g. 'umd'); if missing, the templates/umd.hbs
+//                    // file will be used from [libumd](https://github.com/bebraw/libumd)
+////            template: 'path/to/template.hbs',
+//
+//                    objectToExport: 'LoaderMiniGame', // optional, internal object that will be exported
+//                    amdModuleId: 'loaderminigame', // optional, if missing the AMD module will be anonymous
+//                    globalAlias: 'loaderminigame', // optional, changes the name of the global variable
+//
+//                    deps: {// optional, `default` is used as a fallback for rest!
+//                        'default': ['$'],
+//                        amd: ['jquery'],
+//                        cjs: ['jquery'],
+//                        global: ['jQuery']
+//                    }
+//                }
+//            },
             jquery: {
                 options: {
                     src: 'dist/concat-jquery.js',

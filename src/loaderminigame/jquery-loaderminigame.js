@@ -15,10 +15,10 @@ $.fn.loaderminigame = function (config) {
             });
             return plugin;
         },
-        destroy: function () {
+        destroy: function (options) {
             $jq.each(function () {
                 var _this = this;
-                _this._loadergameInstance.destroy();
+                _this._loadergameInstance.destroy(options);
                 _this._loadergameInstance = undefined;
             });
             return plugin;

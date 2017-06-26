@@ -15,7 +15,9 @@ HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 ## Examples
  * [Complete overview](/docs/demo/test.html)
 
-## Settings
+## API
+
+### Options
 
 ```js
     $('.my_loader_class').loaderminigame({
@@ -26,6 +28,26 @@ HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
         borderBackgroundColor: "transparent",
         baseWidth: 20,
         baseHeight: 20,
+    });
+```
+
+### Methods
+
+#### .destroy(\[options\])
+Destroys all loader minigames within the given scope.
+
+Param 'options':
+The options parameter will be dispatched to the JQuery.fadeOut effect, have a look at [http://api.jquery.com/fadeout/#fadeOut-options] to get the full documentation.
+If the options param is not set, the fadeOut duration will be "fast" ;-)
+
+Example:
+```js
+    $('.my_loader_class').loaderminigame().destroy({
+        duration: 800,
+        easing: 'swing',
+        done: function(){
+            console.log('The damn animation is finally done!');
+        }
     });
 ```
 

@@ -14,7 +14,7 @@
   }
 }(this, function ($) {
 
-/*!loaderminigame - v0.0.1 - 2017-06-25 */
+/*!loaderminigame - v0.0.1 - 2017-06-26 */
 function Loader(parent, config, borders, scale, animationDuration, animationTiming) {
     this.config = $.extend({
         borderSize: "4px",
@@ -379,9 +379,22 @@ function LoaderMiniGame(parent, config) {
             loader.pause();
         }
     };
-    this.destroy = function() {
-        this.parent[0].loaderminigameInstance = undefined;
-        this.element.remove();
+    this.destroy = function(options) {
+        if(typeof options !== 'object') {
+            options = {duration: 'fast'};
+        }
+        var userCb = null;
+        if(typeof options.always === 'function') {
+            userCb = options.always;
+        }
+        options.always = function(){
+            if(userCb){
+                userCb.apply(arguments);
+            }
+            self.parent[0].loaderminigameInstance = undefined;
+            self.element.remove();
+        };
+        self.element.fadeOut(options);
     };
 
     //ensure we only bind on 1 single element in this class
@@ -404,10 +417,10 @@ $.fn.loaderminigame = function (config) {
             });
             return plugin;
         },
-        destroy: function () {
+        destroy: function (options) {
             $jq.each(function () {
                 var _this = this;
-                _this._loadergameInstance.destroy();
+                _this._loadergameInstance.destroy(options);
                 _this._loadergameInstance = undefined;
             });
             return plugin;

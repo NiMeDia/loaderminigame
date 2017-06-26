@@ -205,9 +205,22 @@ function LoaderMiniGame(parent, config) {
             loader.pause();
         }
     };
-    this.destroy = function() {
-        this.parent[0].loaderminigameInstance = undefined;
-        this.element.remove();
+    this.destroy = function(options) {
+        if(typeof options !== 'object') {
+            options = {duration: 'fast'};
+        }
+        var userCb = null;
+        if(typeof options.always === 'function') {
+            userCb = options.always;
+        }
+        options.always = function(){
+            if(userCb){
+                userCb.apply(arguments);
+            }
+            self.parent[0].loaderminigameInstance = undefined;
+            self.element.remove();
+        };
+        self.element.fadeOut(options);
     };
 
     //ensure we only bind on 1 single element in this class

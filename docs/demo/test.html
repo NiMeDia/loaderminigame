@@ -9,7 +9,7 @@
             integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
             crossorigin="anonymous"></script>
         <script src="/loaderminigame/dist/jquery-loaderminigame.js"></script>
-        <script src="/loaderminigame/dist/loaderminigame.js"></script>
+        <!--<script src="/loaderminigame/dist/loaderminigame.js"></script>-->
     </head>
     <body>
         <style>
@@ -23,16 +23,24 @@
         <div class="loader_test_2" id="byId" style="height:200px; background: #00f">lorem ipsum...</div>
         <script>
             $(document).ready(function() {
-                $('.loader_test').loaderminigame({
-                    foo: 'bar'
-                }).start().stop().destroy();
                 $('.loader_test').loaderminigame();
 
-                //standalone usage
-                new loaderminigame(document.getElementById('byId'), {});
+                setTimeout(function(){
+                    $('.loader_test').loaderminigame().destroy({
+                        duration: 1000,
+                        done: function(){
+                            console.log('loading finished...');
+                        }
+                    });
+                }, 60000);
 
-                //Note: this just works on the first found match:
-                new loaderminigame($('.loader_test_2'), {});
+                $('.loader_test_2').loaderminigame();
+
+//                //standalone usage
+//                new loaderminigame(document.getElementById('byId'), {});
+//
+//                //Note: this just works on the first found match:
+//                new loaderminigame($('.loader_test_2'), {});
             });
         </script>
     </body>
