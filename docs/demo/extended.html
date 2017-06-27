@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Loading-Animation-Minigame - Extended</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+        <script src="/loaderminigame/dist/jquery-loaderminigame.js"></script>
+    </head>
+    <body style="overflow: hidden">
+        <div class="my_loader_class" style="height:100%; width: 100%; position: absolute;"></div>
+        <script>
+            var loaderFn = function() {
+                $('.my_loader_class').loaderminigame({
+                    zindex: 9999,
+                    background: 'rgba(30, 30, 30, 0.8)',
+                    loaderBorderSize: "4px",
+                    loaderBorderColor: "#F00",
+                    loaderOpenBorderColor: "#666",
+                    loaderAnimationTimings: ['linear', 'ease-out', 'ease'],
+                    baseLoaderCount: 1,
+                    baseLoaderAnimationTiming: 'linear',
+                    baseLoaderBorders: ['NE', 'SW'],
+                    baseLoaderWidth: 20,
+                    baseLoaderHeight: 20,
+                    minLoaderSpeed: 2,
+                    maxLoaderSpeed: 4,
+                });
+                setTimeout(function(){
+                    $('.my_loader_class').loaderminigame().destroy({
+                        'duration': 1400
+                    });
+                }, 10000);
+            }
+            setInterval(loaderFn, 12000);
+            loaderFn();
+        </script>
+    </body>
+</html>

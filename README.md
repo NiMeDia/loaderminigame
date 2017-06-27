@@ -22,7 +22,8 @@ HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 ```
 
 ## Examples
- * [simple use](/docs/demo/simple.html)
+ * [simple use](https://p0rnflake.github.io/loaderminigame/docs/demo/simple.html)
+ * [extended use / dark theme](https://p0rnflake.github.io/loaderminigame/docs/demo/extended.html)
 
 ## API
 
@@ -36,6 +37,7 @@ HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
         loaderBorderColor: "#666",
         loaderOpenBorderColor: "transparent",
         loaderAnimationTimings: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'],
+        baseLoaderCount: 1,
         baseLoaderAnimationTiming: 'linear',
         baseLoaderBorders: ['NE', 'SE', 'SW'],
         baseLoaderWidth: 20,
@@ -64,9 +66,6 @@ Example:
         }
     });
 ```
-
-## Installation
-TODO
 
 ## UMD Support
 This library is built on top of the [Universal Module Definition API](https://github.com/umdjs/umd) and can therefore be use with amd module loaders like [RequireJS](http://requirejs.org/).

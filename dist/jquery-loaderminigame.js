@@ -184,6 +184,7 @@ function LoaderMiniGame(parent, config) {
         loaderBorderColor: "#666",
         loaderOpenBorderColor: "transparent",
         loaderAnimationTimings: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'],
+        baseLoaderCount: 1,
         baseLoaderAnimationTiming: 'linear',
         baseLoaderBorders: ['NE', 'SE', 'SW'],
         baseLoaderWidth: 20,
@@ -255,7 +256,6 @@ function LoaderMiniGame(parent, config) {
         this.mousePoint = $('<div class="loaderminigame_win"></div>');
         this.mousePoint.css('width', '4px');
         this.mousePoint.css('height', '4px');
-//        this.mousePoint.css('border', '1px solid red');
         this.mousePoint.css('position', 'absolute');
         this.mousePoint.css("border-radius", '50%');
         this.mousePoint.css('background', 'red');
@@ -265,10 +265,10 @@ function LoaderMiniGame(parent, config) {
         this.mousePoint.css('left', '50%');
         this.mousePoint.css("transform", 'translate(-50%, -50%)');
         this.element.append(this.mousePoint);
-        
-        this.__addLoader();
-//        this.__addLoader();
-//        this.__addLoader();
+
+        for(var i=0; i<this.config.baseLoaderCount; i++) {
+            this.__addLoader();
+        }
         parent.append(this.element);
         parent[0].loaderminigameInstance = this;
         this.isInitialized = true;
@@ -285,12 +285,11 @@ function LoaderMiniGame(parent, config) {
     };
 
     this.__handleClickInteraction = function(ev) {
-        self.stop();
-        var mouseAngle = self.__getCurrentMouseAngle(ev); //TODO grab mouse angle
+        self.__stop();
+        var mouseAngle = self.__getCurrentMouseAngle(ev);
         var lastLoaderHit = null;
         for(var x = 0; x < self.loaders.length; x++) {
             var loader = self.loaders[x];
-//            loader.pause();
             var isPassable = loader.isPassable(mouseAngle);
             if(!isPassable) {
                 lastLoaderHit = self.loaders[x];
@@ -308,18 +307,19 @@ function LoaderMiniGame(parent, config) {
                 1000,
                 'linear',
                 function(){
+                    self.__addLoader();
                     self.winPoint.animate({
                         width: 0,
                         height: 0,
-                    }, 1000, 'linear');
-                    self.__addLoader();
-                    self.start();
+                    }, 1000, 'linear', function(){
+                        self.__start();
+                    });
                 }
             );
         } else {
-            //@TODO animate path to loader hit
+            //@TODO animate path to loader hit?
             self.__removeOutestLoader();
-            self.start();
+            self.__start();
         }
     };
 
@@ -347,7 +347,7 @@ function LoaderMiniGame(parent, config) {
     };
 
     this.__addLoader = function() {
-        if(this.loaders.length === 0) {
+        if(this.loaders.length < this.config.baseLoaderCount) {
             this.loaders.push(new Loader(this.element, this.config, this.config.baseLoaderBorders, this.__getNextLoaderScale(), this.config.baseLoaderAnimationTiming));
             return;
         }
@@ -360,7 +360,7 @@ function LoaderMiniGame(parent, config) {
     };
 
     this.__removeOutestLoader = function() {
-        if(this.loaders.length > 1) {
+        if(this.loaders.length > this.config.baseLoaderCount) {
             var loaderToRemove = this.loaders.splice( this.loaders.length - 1, 1 )[0];
             loaderToRemove.destroy();
         }
@@ -370,7 +370,7 @@ function LoaderMiniGame(parent, config) {
         return 1 + (this.loaders.length + 1) / 1.5;
     };
 
-    this.start = function() {
+    this.__start = function() {
         this.element.unbind('click');
         this.element.unbind('mousemove');
         this.element.on('click', this.__handleClickInteraction);
@@ -380,7 +380,7 @@ function LoaderMiniGame(parent, config) {
             loader.resume();
         }
     };
-    this.stop = function() {
+    this.__stop = function() {
         this.element.unbind('click');
         this.element.unbind('mousemove');
         for(var x = 0; x < self.loaders.length; x++) {
@@ -412,20 +412,6 @@ function LoaderMiniGame(parent, config) {
 $.fn.loaderminigame = function (config) {
     var $jq = this;
     var plugin = {
-        stop: function () {
-            $jq.each(function () {
-                var _this = this;
-                _this._loadergameInstance.stop();
-            });
-            return plugin;
-        },
-        start: function () {
-            $jq.each(function () {
-                var _this = this;
-                _this._loadergameInstance.start();
-            });
-            return plugin;
-        },
         destroy: function (options) {
             $jq.each(function () {
                 var _this = this;
@@ -441,7 +427,6 @@ $.fn.loaderminigame = function (config) {
                     _this._loadergameInstance = new LoaderMiniGame(_this, config);
                 }
             });
-//            plugin.start(settings.param);
         }
     };
     plugin.init();

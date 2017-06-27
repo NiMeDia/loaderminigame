@@ -1,20 +1,6 @@
 $.fn.loaderminigame = function (config) {
     var $jq = this;
     var plugin = {
-        stop: function () {
-            $jq.each(function () {
-                var _this = this;
-                _this._loadergameInstance.stop();
-            });
-            return plugin;
-        },
-        start: function () {
-            $jq.each(function () {
-                var _this = this;
-                _this._loadergameInstance.start();
-            });
-            return plugin;
-        },
         destroy: function (options) {
             $jq.each(function () {
                 var _this = this;
@@ -30,7 +16,6 @@ $.fn.loaderminigame = function (config) {
                     _this._loadergameInstance = new LoaderMiniGame(_this, config);
                 }
             });
-//            plugin.start(settings.param);
         }
     };
     plugin.init();
