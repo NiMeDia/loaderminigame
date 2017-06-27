@@ -1,19 +1,28 @@
 # Loading-Animation-Minigame
 HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 
+<iframe width="100%" height="315" src="https://p0rnflake.github.io/loaderminigame/docs/demo/simple.html" frameborder="0"></iframe>
+
+[Docs and Demos](https://p0rnflake.github.io/loaderminigame/)
+
 ## Getting Started
 
-```js
+```html
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="jquery-loaderminigame.js"></script>
+    ...
+    <script>
     // Set up the loader minigame...
     $('.my_loader_class').loaderminigame();
     setTimeout(function(){
         // ...and destroy it after some long-lasting task.
         $('.my_loader_class').loaderminigame().destroy();
     }, 60000);
+    </script>
 ```
 
 ## Examples
- * [Complete overview](/docs/demo/test.html)
+ * [simple use](/docs/demo/simple.html)
 
 ## API
 
@@ -23,11 +32,16 @@ HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
     $('.my_loader_class').loaderminigame({
         zindex: 9999,
         background: 'rgba(255, 255, 255, 0.4)',
-        borderSize: "4px",
-        borderColor: "#666",
-        borderBackgroundColor: "transparent",
-        baseWidth: 20,
-        baseHeight: 20,
+        loaderBorderSize: "4px",
+        loaderBorderColor: "#666",
+        loaderOpenBorderColor: "transparent",
+        loaderAnimationTimings: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'],
+        baseLoaderAnimationTiming: 'linear',
+        baseLoaderBorders: ['NE', 'SE', 'SW'],
+        baseLoaderWidth: 20,
+        baseLoaderHeight: 20,
+        minLoaderSpeed: 1,
+        maxLoaderSpeed: 3,
     });
 ```
 
@@ -37,7 +51,7 @@ HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 Destroys all loader minigames within the given scope.
 
 Param 'options':
-The options parameter will be dispatched to the JQuery.fadeOut effect, have a look at [http://api.jquery.com/fadeout/#fadeOut-options] to get the full documentation.
+The options parameter will be dispatched to the JQuery.fadeOut effect, have a look at <http://api.jquery.com/fadeout/#fadeOut-options> to get the full documentation.
 If the options param is not set, the fadeOut duration will be "fast" ;-)
 
 Example:
@@ -51,8 +65,11 @@ Example:
     });
 ```
 
+## Installation
+TODO
+
 ## UMD Support
-This library can be use with amd module loaders like [RequireJS](http://requirejs.org/).
+This library is built on top of the [Universal Module Definition API](https://github.com/umdjs/umd) and can therefore be use with amd module loaders like [RequireJS](http://requirejs.org/).
 
 ## Requirements
  * [JQuery](https://jquery.com/)
@@ -72,11 +89,6 @@ There is also a watch task which builds continuously on changes in the /src dire
 ```shell
 grunt watch
 ```
-
-
-## Release History
-
- * 2017-06-20   v0.0.0   -
 
 ## License
 MIT

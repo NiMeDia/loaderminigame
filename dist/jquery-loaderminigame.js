@@ -14,23 +14,27 @@
   }
 }(this, function ($) {
 
-/*!loaderminigame - v0.0.1 - 2017-06-26 */
-function Loader(parent, config, borders, scale, animationDuration, animationTiming) {
+/*!loaderminigame - v0.0.1 - 2017-06-27 */
+function Loader(parent, config, borders, scale, animationTiming, animationDuration) {
     this.config = $.extend({
-        borderSize: "4px",
-        borderColor: "#666",
-        borderBackgroundColor: "transparent",
-        baseWidth: 20,
-        baseHeight: 20,
+        loaderBorderSize: "4px",
+        loaderBorderColor: "#666",
+        loaderOpenBorderColor: "transparent",
+        loaderAnimationTimings: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'],
+        baseLoaderBorders: ['NE', 'SE', 'SW'],
+        baseLoaderWidth: 20,
+        baseLoaderHeight: 20,
+        minLoaderSpeed: 1,
+        maxLoaderSpeed: 3,
     }, config);
 
     this.element = null;
 
     this.scale = scale|| 1.0;
     this.borders = borders || ['NE', 'SE', 'SW'];
-    this.animationDuration = animationDuration || (Math.random() * (3 - 1) + 1)+"s";
-    //animation-timing-function: linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|steps(int,start|end)|cubic-bezier(n,n,n,n)|initial|inherit;
-    this.animationTiming = animationTiming || 'linear';
+    this.animationDuration = animationDuration || (Math.random() * (this.config.maxLoaderSpeed - this.config.minLoaderSpeed) + this.config.minLoaderSpeed)+"s";
+    this.animationTimings = this.config.loaderAnimationTimings || ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'];
+    this.animationTiming = animationTiming || this.animationTimings[Math.floor(Math.random()*this.animationTimings.length)];
     this.animations = ['loaderminigame_spin_reversed','loaderminigame_spin'];
     this.blockedRanges = [];
     
@@ -40,28 +44,28 @@ function Loader(parent, config, borders, scale, animationDuration, animationTimi
         this.element.css("position", 'absolute');
         this.element.css("top", '50%');
         this.element.css("left", '50%');
-        this.element.css("border", this.config.borderSize + " solid " + this.config.borderBackgroundColor);
+        this.element.css("border", this.config.loaderBorderSize + " solid " + this.config.loaderOpenBorderColor);
         this.element.css("border-radius", '50%');
-        this.element.css("width", this.config.baseWidth*scale);
-        this.element.css("height", this.config.baseHeight*scale);
+        this.element.css("width", this.config.baseLoaderWidth*scale);
+        this.element.css("height", this.config.baseLoaderHeight*scale);
         this.element.css("transform", 'translate(-50%, -50%)');
         this.element.css("animation", this.animations[Math.floor(Math.random()*this.animations.length)] + ' ' + this.animationDuration + ' ' + this.animationTiming + ' infinite');
         for(var x = 0; x < this.borders.length; x++) {
             switch(this.borders[x]) {
                 case 'NE':
-                    this.element.css("border-top", this.config.borderSize + " solid " + this.config.borderColor);
+                    this.element.css("border-top", this.config.loaderBorderSize + " solid " + this.config.loaderBorderColor);
                     this.blockedRanges.push([0, 90]);
                     break;
                 case 'SE':
-                    this.element.css("border-right", this.config.borderSize + " solid " + this.config.borderColor);
+                    this.element.css("border-right", this.config.loaderBorderSize + " solid " + this.config.loaderBorderColor);
                     this.blockedRanges.push([90, 180]);
                     break;
                 case 'SW':
-                    this.element.css("border-bottom", this.config.borderSize + " solid " + this.config.borderColor);
+                    this.element.css("border-bottom", this.config.loaderBorderSize + " solid " + this.config.loaderBorderColor);
                     this.blockedRanges.push([180, 270]);
                     break;
                 case 'NW':
-                    this.element.css("border-left", this.config.borderSize + " solid " + this.config.borderColor);
+                    this.element.css("border-left", this.config.loaderBorderSize + " solid " + this.config.loaderBorderColor);
                     this.blockedRanges.push([270, 360]);
                     break;
             }
@@ -176,11 +180,16 @@ function LoaderMiniGame(parent, config) {
     this.config = $.extend({
         zindex: 9999,
         background: 'rgba(255, 255, 255, 0.4)',
-        borderSize: "4px",
-        borderColor: "#666",
-        borderBackgroundColor: "transparent",
-        baseWidth: 20,
-        baseHeight: 20,
+        loaderBorderSize: "4px",
+        loaderBorderColor: "#666",
+        loaderOpenBorderColor: "transparent",
+        loaderAnimationTimings: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'],
+        baseLoaderAnimationTiming: 'linear',
+        baseLoaderBorders: ['NE', 'SE', 'SW'],
+        baseLoaderWidth: 20,
+        baseLoaderHeight: 20,
+        minLoaderSpeed: 1,
+        maxLoaderSpeed: 3,
     }, config);
     
     var self = this;
@@ -209,7 +218,7 @@ function LoaderMiniGame(parent, config) {
                 '}' +
             '</style></div>');
         }
-        if(parent.css('position') !== 'absolute' || parent.css('position') !== 'relative' || parent.css('position') !== 'fixed') {
+        if(parent.css('position') !== 'absolute' && parent.css('position') !== 'relative' && parent.css('position') !== 'fixed') {
             console.log('LoaderGame::initialize: Parent object must be position absolute, relative or fixed -> changing it to relative...');
             parent.css('position', 'relative');
         }
@@ -233,10 +242,9 @@ function LoaderMiniGame(parent, config) {
         this.winPoint = $('<div class="loaderminigame_win"></div>');
         this.winPoint.css('width', '0px');
         this.winPoint.css('height', '0px');
-        this.winPoint.css('border', '1px solid ' + this.config.borderColor);
+        this.winPoint.css('border', '1px solid ' + this.config.loaderBorderColor);
         this.winPoint.css('position', 'absolute');
         this.winPoint.css("border-radius", '50%');
-//        this.winPoint.css('background', this.config.borderColor);
         this.winPoint.css('padding', 0);
         this.winPoint.css('margin', 0);
         this.winPoint.css('top', '50%');
@@ -268,18 +276,10 @@ function LoaderMiniGame(parent, config) {
     };
 
     this.__handleMouseMove = function(ev) {
-//        var offset = self.element.offset();
-//        var divPos = {
-//            left: ev.pageX - offset.left,
-//            top: ev.pageY - offset.top
-//        };
-//        self.mousePoint.css('left', (divPos.left - 3) + 'px');
-//        self.mousePoint.css('top', (divPos.top - 3) + 'px');
-        
         var radians = self.__getCurrentMouseRadians(ev);
         var scale = self.__getNextLoaderScale();
-        var offsetX = (self.config.baseWidth * scale + 10) * Math.cos(radians) * -1 / 2;
-        var offsetY = (self.config.baseHeight * scale + 10) * Math.sin(radians) * -1 / 2;
+        var offsetX = (self.config.baseLoaderWidth * scale + 10) * Math.cos(radians) * -1 / 2;
+        var offsetY = (self.config.baseLoaderHeight * scale + 10) * Math.sin(radians) * -1 / 2;
         self.mousePoint.css('left', (self.winPoint.position().left + offsetX) + 'px');
         self.mousePoint.css('top', (self.winPoint.position().top + offsetY) + 'px');
     };
@@ -318,7 +318,7 @@ function LoaderMiniGame(parent, config) {
             );
         } else {
             //@TODO animate path to loader hit
-            self.__removeLoader();
+            self.__removeOutestLoader();
             self.start();
         }
     };
@@ -347,13 +347,22 @@ function LoaderMiniGame(parent, config) {
     };
 
     this.__addLoader = function() {
-        var borders = ['NE', 'SW', 'SE'];
+        if(this.loaders.length === 0) {
+            this.loaders.push(new Loader(this.element, this.config, this.config.baseLoaderBorders, this.__getNextLoaderScale(), this.config.baseLoaderAnimationTiming));
+            return;
+        }
+        var borders = ['NE', 'SE', 'SW', 'NW'];
+        var removeBordersCount = Math.floor(Math.random() * 3) + 1;
+        for(var i = 0; i<removeBordersCount;i++){
+            borders.splice(Math.floor(Math.random()*borders.length), 1);
+        }
         this.loaders.push(new Loader(this.element, this.config, borders, this.__getNextLoaderScale()));
     };
-    this.__removeLoader = function() {
+
+    this.__removeOutestLoader = function() {
         if(this.loaders.length > 1) {
             var loaderToRemove = this.loaders.splice( this.loaders.length - 1, 1 )[0];
-           loaderToRemove.destroy();
+            loaderToRemove.destroy();
         }
     };
 

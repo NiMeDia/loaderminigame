@@ -1,19 +1,23 @@
-function Loader(parent, config, borders, scale, animationDuration, animationTiming) {
+function Loader(parent, config, borders, scale, animationTiming, animationDuration) {
     this.config = $.extend({
-        borderSize: "4px",
-        borderColor: "#666",
-        borderBackgroundColor: "transparent",
-        baseWidth: 20,
-        baseHeight: 20,
+        loaderBorderSize: "4px",
+        loaderBorderColor: "#666",
+        loaderOpenBorderColor: "transparent",
+        loaderAnimationTimings: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'],
+        baseLoaderBorders: ['NE', 'SE', 'SW'],
+        baseLoaderWidth: 20,
+        baseLoaderHeight: 20,
+        minLoaderSpeed: 1,
+        maxLoaderSpeed: 3,
     }, config);
 
     this.element = null;
 
     this.scale = scale|| 1.0;
     this.borders = borders || ['NE', 'SE', 'SW'];
-    this.animationDuration = animationDuration || (Math.random() * (3 - 1) + 1)+"s";
-    //animation-timing-function: linear|ease|ease-in|ease-out|ease-in-out|step-start|step-end|steps(int,start|end)|cubic-bezier(n,n,n,n)|initial|inherit;
-    this.animationTiming = animationTiming || 'linear';
+    this.animationDuration = animationDuration || (Math.random() * (this.config.maxLoaderSpeed - this.config.minLoaderSpeed) + this.config.minLoaderSpeed)+"s";
+    this.animationTimings = this.config.loaderAnimationTimings || ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'];
+    this.animationTiming = animationTiming || this.animationTimings[Math.floor(Math.random()*this.animationTimings.length)];
     this.animations = ['loaderminigame_spin_reversed','loaderminigame_spin'];
     this.blockedRanges = [];
     
@@ -23,28 +27,28 @@ function Loader(parent, config, borders, scale, animationDuration, animationTimi
         this.element.css("position", 'absolute');
         this.element.css("top", '50%');
         this.element.css("left", '50%');
-        this.element.css("border", this.config.borderSize + " solid " + this.config.borderBackgroundColor);
+        this.element.css("border", this.config.loaderBorderSize + " solid " + this.config.loaderOpenBorderColor);
         this.element.css("border-radius", '50%');
-        this.element.css("width", this.config.baseWidth*scale);
-        this.element.css("height", this.config.baseHeight*scale);
+        this.element.css("width", this.config.baseLoaderWidth*scale);
+        this.element.css("height", this.config.baseLoaderHeight*scale);
         this.element.css("transform", 'translate(-50%, -50%)');
         this.element.css("animation", this.animations[Math.floor(Math.random()*this.animations.length)] + ' ' + this.animationDuration + ' ' + this.animationTiming + ' infinite');
         for(var x = 0; x < this.borders.length; x++) {
             switch(this.borders[x]) {
                 case 'NE':
-                    this.element.css("border-top", this.config.borderSize + " solid " + this.config.borderColor);
+                    this.element.css("border-top", this.config.loaderBorderSize + " solid " + this.config.loaderBorderColor);
                     this.blockedRanges.push([0, 90]);
                     break;
                 case 'SE':
-                    this.element.css("border-right", this.config.borderSize + " solid " + this.config.borderColor);
+                    this.element.css("border-right", this.config.loaderBorderSize + " solid " + this.config.loaderBorderColor);
                     this.blockedRanges.push([90, 180]);
                     break;
                 case 'SW':
-                    this.element.css("border-bottom", this.config.borderSize + " solid " + this.config.borderColor);
+                    this.element.css("border-bottom", this.config.loaderBorderSize + " solid " + this.config.loaderBorderColor);
                     this.blockedRanges.push([180, 270]);
                     break;
                 case 'NW':
-                    this.element.css("border-left", this.config.borderSize + " solid " + this.config.borderColor);
+                    this.element.css("border-left", this.config.loaderBorderSize + " solid " + this.config.loaderBorderColor);
                     this.blockedRanges.push([270, 360]);
                     break;
             }

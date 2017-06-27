@@ -2,11 +2,16 @@ function LoaderMiniGame(parent, config) {
     this.config = $.extend({
         zindex: 9999,
         background: 'rgba(255, 255, 255, 0.4)',
-        borderSize: "4px",
-        borderColor: "#666",
-        borderBackgroundColor: "transparent",
-        baseWidth: 20,
-        baseHeight: 20,
+        loaderBorderSize: "4px",
+        loaderBorderColor: "#666",
+        loaderOpenBorderColor: "transparent",
+        loaderAnimationTimings: ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'],
+        baseLoaderAnimationTiming: 'linear',
+        baseLoaderBorders: ['NE', 'SE', 'SW'],
+        baseLoaderWidth: 20,
+        baseLoaderHeight: 20,
+        minLoaderSpeed: 1,
+        maxLoaderSpeed: 3,
     }, config);
     
     var self = this;
@@ -35,7 +40,7 @@ function LoaderMiniGame(parent, config) {
                 '}' +
             '</style></div>');
         }
-        if(parent.css('position') !== 'absolute' || parent.css('position') !== 'relative' || parent.css('position') !== 'fixed') {
+        if(parent.css('position') !== 'absolute' && parent.css('position') !== 'relative' && parent.css('position') !== 'fixed') {
             console.log('LoaderGame::initialize: Parent object must be position absolute, relative or fixed -> changing it to relative...');
             parent.css('position', 'relative');
         }
@@ -59,10 +64,9 @@ function LoaderMiniGame(parent, config) {
         this.winPoint = $('<div class="loaderminigame_win"></div>');
         this.winPoint.css('width', '0px');
         this.winPoint.css('height', '0px');
-        this.winPoint.css('border', '1px solid ' + this.config.borderColor);
+        this.winPoint.css('border', '1px solid ' + this.config.loaderBorderColor);
         this.winPoint.css('position', 'absolute');
         this.winPoint.css("border-radius", '50%');
-//        this.winPoint.css('background', this.config.borderColor);
         this.winPoint.css('padding', 0);
         this.winPoint.css('margin', 0);
         this.winPoint.css('top', '50%');
@@ -94,18 +98,10 @@ function LoaderMiniGame(parent, config) {
     };
 
     this.__handleMouseMove = function(ev) {
-//        var offset = self.element.offset();
-//        var divPos = {
-//            left: ev.pageX - offset.left,
-//            top: ev.pageY - offset.top
-//        };
-//        self.mousePoint.css('left', (divPos.left - 3) + 'px');
-//        self.mousePoint.css('top', (divPos.top - 3) + 'px');
-        
         var radians = self.__getCurrentMouseRadians(ev);
         var scale = self.__getNextLoaderScale();
-        var offsetX = (self.config.baseWidth * scale + 10) * Math.cos(radians) * -1 / 2;
-        var offsetY = (self.config.baseHeight * scale + 10) * Math.sin(radians) * -1 / 2;
+        var offsetX = (self.config.baseLoaderWidth * scale + 10) * Math.cos(radians) * -1 / 2;
+        var offsetY = (self.config.baseLoaderHeight * scale + 10) * Math.sin(radians) * -1 / 2;
         self.mousePoint.css('left', (self.winPoint.position().left + offsetX) + 'px');
         self.mousePoint.css('top', (self.winPoint.position().top + offsetY) + 'px');
     };
@@ -144,7 +140,7 @@ function LoaderMiniGame(parent, config) {
             );
         } else {
             //@TODO animate path to loader hit
-            self.__removeLoader();
+            self.__removeOutestLoader();
             self.start();
         }
     };
@@ -173,13 +169,22 @@ function LoaderMiniGame(parent, config) {
     };
 
     this.__addLoader = function() {
-        var borders = ['NE', 'SW', 'SE'];
+        if(this.loaders.length === 0) {
+            this.loaders.push(new Loader(this.element, this.config, this.config.baseLoaderBorders, this.__getNextLoaderScale(), this.config.baseLoaderAnimationTiming));
+            return;
+        }
+        var borders = ['NE', 'SE', 'SW', 'NW'];
+        var removeBordersCount = Math.floor(Math.random() * 3) + 1;
+        for(var i = 0; i<removeBordersCount;i++){
+            borders.splice(Math.floor(Math.random()*borders.length), 1);
+        }
         this.loaders.push(new Loader(this.element, this.config, borders, this.__getNextLoaderScale()));
     };
-    this.__removeLoader = function() {
+
+    this.__removeOutestLoader = function() {
         if(this.loaders.length > 1) {
             var loaderToRemove = this.loaders.splice( this.loaders.length - 1, 1 )[0];
-           loaderToRemove.destroy();
+            loaderToRemove.destroy();
         }
     };
 
