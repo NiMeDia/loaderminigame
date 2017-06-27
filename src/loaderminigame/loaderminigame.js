@@ -129,13 +129,12 @@ function LoaderMiniGame(parent, config) {
                 1000,
                 'linear',
                 function(){
-                    self.__addLoader();
                     self.winPoint.animate({
                         width: 0,
                         height: 0,
-                    }, 1000, 'linear', function(){
-                        self.__start();
-                    });
+                    }, 500, 'linear');
+                    self.__addLoader();
+                    self.__start();
                 }
             );
         } else {
