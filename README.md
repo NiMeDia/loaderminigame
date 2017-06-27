@@ -1,7 +1,7 @@
 # Loading-Animation-Minigame
 HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 
-<iframe width="100%" height="315" src="https://p0rnflake.github.io/loaderminigame/docs/demo/simple.html" frameborder="0"></iframe>
+[//]: # <div><iframe width="100%" height="315" src="https://p0rnflake.github.io/loaderminigame/docs/demo/simple.html" frameborder="0"></iframe></div>
 
 [Docs and Demos](https://p0rnflake.github.io/loaderminigame/)
 
@@ -9,15 +9,15 @@ HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 
 ```html
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="jquery-loaderminigame.js"></script>
+    <script src="/dist/jquery-loaderminigame.js"></script>
     ...
     <script>
-    // Set up the loader minigame...
-    $('.my_loader_class').loaderminigame();
-    setTimeout(function(){
-        // ...and destroy it after some long-lasting task.
-        $('.my_loader_class').loaderminigame().destroy();
-    }, 60000);
+        // Set up the loader minigame...
+        $('.my_loader_class').loaderminigame();
+        setTimeout(function(){
+            // ...and destroy it after some long-lasting task.
+            $('.my_loader_class').loaderminigame().destroy();
+        }, 60000);
     </script>
 ```
 
@@ -72,7 +72,7 @@ TODO
 This library is built on top of the [Universal Module Definition API](https://github.com/umdjs/umd) and can therefore be use with amd module loaders like [RequireJS](http://requirejs.org/).
 
 ## Requirements
- * [JQuery](https://jquery.com/)
+ * [JQuery](https://jquery.com/) (should be compatible with most of the versions)
  * HTML5 / CSS3 compatible browser
 
 ## Known Issues
