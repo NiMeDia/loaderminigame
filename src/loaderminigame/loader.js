@@ -1,3 +1,13 @@
+/**
+ * A Loader instance of the LoaderMinigame.
+ * @param {Jquery Object} parent
+ * @param {Object} config
+ * @param {Array|undefined} borders
+ * @param {Number|undefined} scale
+ * @param {String|undefined} animationTiming
+ * @param {Number|undefined} animationDuration
+ * @returns {Loader}
+ */
 function Loader(parent, config, borders, scale, animationTiming, animationDuration) {
     this.config = $.extend({
         loaderBorderSize: "4px",
@@ -12,6 +22,7 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
     }, config);
 
     this.element = null;
+    this.blockedRanges = [];
 
     this.scale = scale|| 1.0;
     this.borders = borders || ['NE', 'SE', 'SW'];
@@ -19,8 +30,11 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
     this.animationTimings = this.config.loaderAnimationTimings || ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'];
     this.animationTiming = animationTiming || this.animationTimings[Math.floor(Math.random()*this.animationTimings.length)];
     this.animations = ['loaderminigame_spin_reversed','loaderminigame_spin'];
-    this.blockedRanges = [];
-    
+
+    /**
+     * Constructor.
+     * @returns {undefined}
+     */
     this.__initialize = function() {
         this.element = $('<div class="loaderminigame_loader"></div>');
         this.element.hide();
@@ -73,7 +87,7 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
             if(blockRightAngle >= 360) {
                 blockRightAngle = blockRightAngle - 360;
             }
-//            console.log("blockLeftAngle: " + blockLeftAngle, "blockRightAngle: " + blockRightAngle, "passableFromAngle: " + passableFromAngle)
+            //console.log("blockLeftAngle: " + blockLeftAngle, "blockRightAngle: " + blockRightAngle, "passableFromAngle: " + passableFromAngle)
             if(passableFromAngle >= blockLeftAngle) {
                 if(blockLeftAngle > blockRightAngle) {
                     //happens if blockRightAngle is >360 and restarts with 0,
@@ -98,6 +112,10 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
         return true;
     };
 
+    /**
+     * Pauses the loading transition at the current keyframe.
+     * @returns {undefined}
+     */
     this.pause = function() {
         this.element.css('-webkit-animation-play-state', 'paused');
         this.element.css('-moz-animation-play-state', 'paused');
@@ -106,6 +124,10 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
         this.element.css('animation-play-state', 'paused');
     };
 
+    /**
+     * Resumes the loading transition from the current keyframe.
+     * @returns {undefined}
+     */
     this.resume = function() {
         this.element.css('-webkit-animation-play-state', 'running');
         this.element.css('-moz-animation-play-state', 'running');
@@ -114,8 +136,41 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
         this.element.css('animation-play-state', 'running');
     };
 
-    this.destroy = function() {
-        this.element.remove();
+    /**
+     * Destroys the loader element by showing its fadeout animation 
+     * and removing the element from the DOM.
+     * @param {function} callback
+     * @returns {undefined}
+     */
+    this.destroy = function(callback) {
+        var self = this;
+        var stepDuration = 250;
+        self.element.animate({
+                opacity: 0,
+            }, 
+            stepDuration,
+            'swing',
+            function(){
+                self.element.animate({
+                        opacity: 0.8,
+                    }, 
+                    stepDuration,
+                    'swing',
+                    function(){
+                        self.element.animate({
+                                opacity: 0,
+                            }, 
+                            stepDuration,
+                            'swing',
+                            function(){
+                                self.element.remove();
+                                callback();
+                            }
+                        );
+                    }
+                );
+            }
+        );
     };
 
     /**
@@ -123,6 +178,7 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
      * 0 is calculated with a 45° offset to the elements base rotation in browser.
      * The offset ensures that the top border can be used as NW wall, etc. which
      * makes the collision detection easier.
+     * Note: 0° is in the north.
      * @returns {Number}
      */
     this.getCurrentRotation = function () {
@@ -156,6 +212,6 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
         //console.log('Rotate: ' + angle + '°');
         return angle;
     };
-    
+
     this.__initialize();
 }

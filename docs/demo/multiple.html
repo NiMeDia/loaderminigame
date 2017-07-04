@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Loading-Animation-Minigame - Multiple</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script
+            src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+            crossorigin="anonymous"></script>
+        <script src="/loaderminigame/dist/jquery-loaderminigame.js"></script>
+    </head>
+    <body style="overflow: hidden">
+        <div class="my_loader_class" style="height:50%; width:100%; position: absolute; top: 0;"></div>
+        <div class="my_loader_class" style="height:50%; width:100%; position: absolute; bottom: 0;"></div>
+        <script>
+            $('.my_loader_class').loaderminigame();
+        </script>
+    </body>
+</html>

@@ -14,7 +14,7 @@
   }
 }(this, function ($) {
 
-/*!loaderminigame - v0.0.1 - 2017-06-27 */
+/*!loaderminigame - v0.0.1 - 2017-07-04 */
 function Loader(parent, config, borders, scale, animationTiming, animationDuration) {
     this.config = $.extend({
         loaderBorderSize: "4px",
@@ -29,6 +29,7 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
     }, config);
 
     this.element = null;
+    this.blockedRanges = [];
 
     this.scale = scale|| 1.0;
     this.borders = borders || ['NE', 'SE', 'SW'];
@@ -36,8 +37,11 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
     this.animationTimings = this.config.loaderAnimationTimings || ['linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out'];
     this.animationTiming = animationTiming || this.animationTimings[Math.floor(Math.random()*this.animationTimings.length)];
     this.animations = ['loaderminigame_spin_reversed','loaderminigame_spin'];
-    this.blockedRanges = [];
-    
+
+    /**
+     * Constructor.
+     * @returns {undefined}
+     */
     this.__initialize = function() {
         this.element = $('<div class="loaderminigame_loader"></div>');
         this.element.hide();
@@ -90,7 +94,7 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
             if(blockRightAngle >= 360) {
                 blockRightAngle = blockRightAngle - 360;
             }
-//            console.log("blockLeftAngle: " + blockLeftAngle, "blockRightAngle: " + blockRightAngle, "passableFromAngle: " + passableFromAngle)
+            //console.log("blockLeftAngle: " + blockLeftAngle, "blockRightAngle: " + blockRightAngle, "passableFromAngle: " + passableFromAngle)
             if(passableFromAngle >= blockLeftAngle) {
                 if(blockLeftAngle > blockRightAngle) {
                     //happens if blockRightAngle is >360 and restarts with 0,
@@ -115,6 +119,10 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
         return true;
     };
 
+    /**
+     * Pauses the loading transition at the current keyframe.
+     * @returns {undefined}
+     */
     this.pause = function() {
         this.element.css('-webkit-animation-play-state', 'paused');
         this.element.css('-moz-animation-play-state', 'paused');
@@ -123,6 +131,10 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
         this.element.css('animation-play-state', 'paused');
     };
 
+    /**
+     * Resumes the loading transition from the current keyframe.
+     * @returns {undefined}
+     */
     this.resume = function() {
         this.element.css('-webkit-animation-play-state', 'running');
         this.element.css('-moz-animation-play-state', 'running');
@@ -131,8 +143,41 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
         this.element.css('animation-play-state', 'running');
     };
 
-    this.destroy = function() {
-        this.element.remove();
+    /**
+     * Destroys the loader element by showing its fadeout animation 
+     * and removing the element from the DOM.
+     * @param {function} callback
+     * @returns {undefined}
+     */
+    this.destroy = function(callback) {
+        var self = this;
+        var stepDuration = 250;
+        self.element.animate({
+                opacity: 0,
+            }, 
+            stepDuration,
+            'swing',
+            function(){
+                self.element.animate({
+                        opacity: 0.8,
+                    }, 
+                    stepDuration,
+                    'swing',
+                    function(){
+                        self.element.animate({
+                                opacity: 0,
+                            }, 
+                            stepDuration,
+                            'swing',
+                            function(){
+                                self.element.remove();
+                                callback();
+                            }
+                        );
+                    }
+                );
+            }
+        );
     };
 
     /**
@@ -140,6 +185,7 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
      * 0 is calculated with a 45° offset to the elements base rotation in browser.
      * The offset ensures that the top border can be used as NW wall, etc. which
      * makes the collision detection easier.
+     * Note: 0° is in the north.
      * @returns {Number}
      */
     this.getCurrentRotation = function () {
@@ -173,7 +219,7 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
         //console.log('Rotate: ' + angle + '°');
         return angle;
     };
-    
+
     this.__initialize();
 };
 function LoaderMiniGame(parent, config) {
@@ -190,7 +236,7 @@ function LoaderMiniGame(parent, config) {
         baseLoaderWidth: 20,
         baseLoaderHeight: 20,
         minLoaderSpeed: 1,
-        maxLoaderSpeed: 3,
+        maxLoaderSpeed: 3
     }, config);
     
     var self = this;
@@ -200,9 +246,13 @@ function LoaderMiniGame(parent, config) {
     this.mousePoint = null;
     this.loaders = [];
 
+    /**
+     * Constructor.
+     * @param {JQuery Object} parent
+     * @returns {undefined}
+     */
     this.__initialize = function(parent) {
         if(typeof parent[0].loaderminigameInstance !== 'undefined') {
-            console.log('already instanced, returning the loadergame instance');
             return parent[0].loaderminigameInstance;
         }
         this.parent = parent;
@@ -220,10 +270,10 @@ function LoaderMiniGame(parent, config) {
             '</style></div>');
         }
         if(parent.css('position') !== 'absolute' && parent.css('position') !== 'relative' && parent.css('position') !== 'fixed') {
-            console.log('LoaderGame::initialize: Parent object must be position absolute, relative or fixed -> changing it to relative...');
+            console.log('LoaderMiniGame::initialize: Parent object must be position absolute, relative or fixed -> changing it to relative...');
             parent.css('position', 'relative');
         }
-        //init logic
+
         this.element = $('<div class="loaderminigame_wrapper"></div>');
         this.element.css('width', '100%');
         this.element.css('height', '100%');
@@ -271,12 +321,16 @@ function LoaderMiniGame(parent, config) {
         }
         parent.append(this.element);
         parent[0].loaderminigameInstance = this;
-        this.isInitialized = true;
-        return this;
     };
 
+    /**
+     * Cursor movement handler.
+     * Places the 'MousePoint' dot at the right angle.
+     * @param {Event} ev
+     * @returns {undefined}
+     */
     this.__handleMouseMove = function(ev) {
-        var radians = self.__getCurrentMouseRadians(ev);
+        var radians = self.__getCurrentCursorRadians(ev);
         var scale = self.__getNextLoaderScale();
         var offsetX = (self.config.baseLoaderWidth * scale + 10) * Math.cos(radians) * -1 / 2;
         var offsetY = (self.config.baseLoaderHeight * scale + 10) * Math.sin(radians) * -1 / 2;
@@ -284,9 +338,17 @@ function LoaderMiniGame(parent, config) {
         self.mousePoint.css('top', (self.winPoint.position().top + offsetY) + 'px');
     };
 
+    /**
+     * Click interaction handler.
+     * Validates if the current click can pass to the target or not.
+     * If all loaders are passable the victory animation is shown and another 
+     * loader will be added to the game. If not the outest loader will be removed.
+     * @param {Event} ev
+     * @returns {undefined}
+     */
     this.__handleClickInteraction = function(ev) {
         self.__stop();
-        var mouseAngle = self.__getCurrentMouseAngle(ev);
+        var mouseAngle = self.__getCurrentCursorAngle(ev);
         var lastLoaderHit = null;
         for(var x = 0; x < self.loaders.length; x++) {
             var loader = self.loaders[x];
@@ -298,31 +360,36 @@ function LoaderMiniGame(parent, config) {
         if(!lastLoaderHit) {
             self.mousePoint.animate({
                 top: self.winPoint.position().top + 1,
-                left: self.winPoint.position().left + 1,
+                left: self.winPoint.position().left + 1
             }, 1000 );
             self.winPoint.animate({
                     width: 10,
-                    height: 10,
+                    height: 10
                 }, 
                 1000,
                 'linear',
                 function(){
                     self.winPoint.animate({
                         width: 0,
-                        height: 0,
+                        height: 0
                     }, 500, 'linear');
                     self.__addLoader();
                     self.__start();
                 }
             );
         } else {
-            //@TODO animate path to loader hit?
-            self.__removeOutestLoader();
-            self.__start();
+            self.__removeOutestLoader(function() {
+                self.__start();
+            });
         }
     };
 
-    this.__getCurrentMouseRadians = function(ev) {
+    /**
+     * Returns the rotation of the events cursor position in radians.
+     * @param {Event} ev
+     * @returns {Number}
+     */
+    this.__getCurrentCursorRadians = function(ev) {
         var y2 = ev.clientY;
         var x2 = ev.clientX;
         var baseRect = self.winPoint[0].getBoundingClientRect();
@@ -335,8 +402,14 @@ function LoaderMiniGame(parent, config) {
         return radians;
     };
 
-    this.__getCurrentMouseAngle = function(ev) {
-        var radians = self.__getCurrentMouseRadians(ev);
+    /**
+     * Returns the rotation of the events cursor position in degrees.
+     * Performs normalization logic so that 0° is in the north.
+     * @param {Event} ev
+     * @returns {Number}
+     */
+    this.__getCurrentCursorAngle = function(ev) {
+        var radians = self.__getCurrentCursorRadians(ev);
         var mouseAngle = Math.round( radians * (180/Math.PI));
         mouseAngle = mouseAngle - 90;
         if(mouseAngle < 0) {
@@ -345,6 +418,14 @@ function LoaderMiniGame(parent, config) {
         return mouseAngle;
     };
 
+    /**
+     * Adds another loader to the game.
+     * New loaders will be sized by <this.__getNextLoaderScale> and will have
+     * at least 1 border but at maximum 3 borders.
+     * If the <config.baseLoaderCount> is not reached the loader to be added will
+     * have the <config.baseLoader%> properties.
+     * @returns {undefined}
+     */
     this.__addLoader = function() {
         if(this.loaders.length < this.config.baseLoaderCount) {
             this.loaders.push(new Loader(this.element, this.config, this.config.baseLoaderBorders, this.__getNextLoaderScale(), this.config.baseLoaderAnimationTiming));
@@ -358,35 +439,79 @@ function LoaderMiniGame(parent, config) {
         this.loaders.push(new Loader(this.element, this.config, borders, this.__getNextLoaderScale()));
     };
 
-    this.__removeOutestLoader = function() {
+    /**
+     * Removes the outest loader by calling its destroy method.
+     * Will not remove any loader if the <config.baseLoaderCount> would
+     * be undershot by this action.
+     * @param {Function} callback
+     * @returns {undefined}
+     */
+    this.__removeOutestLoader = function(callback) {
         if(this.loaders.length > this.config.baseLoaderCount) {
             var loaderToRemove = this.loaders.splice( this.loaders.length - 1, 1 )[0];
-            loaderToRemove.destroy();
+            loaderToRemove.destroy(callback);
+        } else {
+            callback();
         }
     };
 
+    /**
+     * Returns the next loader scale depending on the currently active loaders.
+     * @returns {Number}
+     */
     this.__getNextLoaderScale = function() {
         return 1 + (this.loaders.length + 1) / 1.5;
     };
 
-    this.__start = function() {
-        this.element.unbind('click');
-        this.element.unbind('mousemove');
+    /**
+     * Binds the user interaction events.
+     * @returns {undefined}
+     */
+    this.__bindUserControlls = function() {
+        this.__unbindUserControlls();
         this.element.on('click', this.__handleClickInteraction);
         this.element.on('mousemove', this.__handleMouseMove);
+    };
+
+    /**
+     * Unbinds the user interaction events.
+     * @returns {undefined}
+     */
+    this.__unbindUserControlls = function() {
+        this.element.unbind('click');
+        this.element.unbind('mousemove');
+    };
+
+    /**
+     * Starts the loader game by binding the user controlls and resuming all loaders.
+     * @returns {undefined}
+     */
+    this.__start = function() {
+        this.__bindUserControlls();
         for(var x = 0; x < self.loaders.length; x++) {
             var loader = self.loaders[x];
             loader.resume();
         }
     };
+
+    /**
+     * Stops the loader game by unbinding the user controlls and pausing all loaders.
+     * @returns {undefined}
+     */
     this.__stop = function() {
-        this.element.unbind('click');
-        this.element.unbind('mousemove');
+        this.__unbindUserControlls();
         for(var x = 0; x < self.loaders.length; x++) {
             var loader = self.loaders[x];
             loader.pause();
         }
     };
+
+    /**
+     * Destroys the loaderminigame instance by fading out and removing the
+     * DOM element.
+     * @param {Object} options - see http://api.jquery.com/fadeout/#fadeOut-options
+     * @returns {undefined}
+     */
     this.destroy = function(options) {
         if(typeof options !== 'object') {
             options = {duration: 'fast'};
@@ -406,7 +531,10 @@ function LoaderMiniGame(parent, config) {
     };
 
     //ensure we only bind on 1 single element in this class
-    return this.__initialize($($(parent)[0]));
+    if(typeof $(parent)[0] === 'undefined') {
+        throw "No object to bind the loaderminigame."
+    }
+    this.__initialize($($(parent)[0]));
 };
 $.fn.loaderminigame = function (config) {
     var $jq = this;
