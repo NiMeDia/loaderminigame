@@ -1,0 +1,27 @@
+{
+  "name": "jquery-loaderminigame",
+  "description": "HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.",
+  "keywords": [
+    "jquery",
+    "jquery-plugin",
+    "ecosystem:jquery",
+    "game",
+    "minigame",
+    "loading",
+    "loader",
+    "ajax"
+  ],
+  "version": "1.0.0",
+  "authors": [
+    "P0rnflake"
+  ],
+  "license": "MIT",
+  "homepage": "http://p0rnflake.github.io/loaderminigame/",
+  "ignore": [
+    "node_modules"
+  ],
+  "main": ["dist/jquery-loaderminigame.min.js"],
+  "dependencies": {
+    "jquery": ">=1.7.0"
+  }
+}
