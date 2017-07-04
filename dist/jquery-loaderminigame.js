@@ -14,7 +14,24 @@
   }
 }(this, function ($) {
 
-/*!loaderminigame - v0.0.1 - 2017-07-04 */
+/*
+ *  jquery-loaderminigame - v1.0.0
+ *  HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
+ *  http://github.com/P0rnflake/loaderminigame
+ *
+ *  Made by P0rnflake
+ *  Under MIT License
+ */
+/**
+ * A Loader instance of the LoaderMinigame.
+ * @param {Jquery Object} parent
+ * @param {Object} config
+ * @param {Array|undefined} borders
+ * @param {Number|undefined} scale
+ * @param {String|undefined} animationTiming
+ * @param {Number|undefined} animationDuration
+ * @returns {Loader}
+ */
 function Loader(parent, config, borders, scale, animationTiming, animationDuration) {
     this.config = $.extend({
         loaderBorderSize: "4px",
@@ -203,14 +220,14 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
               values = values.split(',');
             var a = values[0];
             var b = values[1];
-            var c = values[2];
-            var d = values[3];
+            //var c = values[2];
+            //var d = values[3];
 
             var radians = Math.atan2(b, a);
             if ( radians < 0 ) {
               radians += (2 * Math.PI);
             }
-            var angle = Math.round( radians * (180/Math.PI));
+            angle = Math.round( radians * (180/Math.PI));
             angle = angle - 45;
             if(angle < 0) {
                 angle = 360 + angle;
@@ -221,7 +238,15 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
     };
 
     this.__initialize();
-};
+}
+/*exported Loader */;
+/*global Loader */
+/**
+ * The LoaderMiniGame.
+ * @param {JqueryObject or Selector} parent - if a selector is provided only the first match will be used.
+ * @param {Object} config
+ * @returns {LoaderMiniGame}
+ */
 function LoaderMiniGame(parent, config) {
     this.config = $.extend({
         zindex: 9999,
@@ -532,10 +557,12 @@ function LoaderMiniGame(parent, config) {
 
     //ensure we only bind on 1 single element in this class
     if(typeof $(parent)[0] === 'undefined') {
-        throw "No object to bind the loaderminigame."
+        throw "No object to bind the loaderminigame.";
     }
     this.__initialize($($(parent)[0]));
-};
+}
+/*exported LoaderMiniGame */;
+/*global LoaderMiniGame */
 $.fn.loaderminigame = function (config) {
     var $jq = this;
     var plugin = {

@@ -1,4 +1,4 @@
-# Loading-Animation-Minigame
+# jquery-loaderminigame
 HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 
 <iframe width="100%" height="210" src="https://p0rnflake.github.io/loaderminigame/docs/demo/simple.html" frameborder="0"></iframe>

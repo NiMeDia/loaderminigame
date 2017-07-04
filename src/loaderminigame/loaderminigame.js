@@ -1,3 +1,4 @@
+/*global Loader */
 /**
  * The LoaderMiniGame.
  * @param {JqueryObject or Selector} parent - if a selector is provided only the first match will be used.
@@ -314,7 +315,8 @@ function LoaderMiniGame(parent, config) {
 
     //ensure we only bind on 1 single element in this class
     if(typeof $(parent)[0] === 'undefined') {
-        throw "No object to bind the loaderminigame."
+        throw "No object to bind the loaderminigame.";
     }
     this.__initialize($($(parent)[0]));
 }
+/*exported LoaderMiniGame */

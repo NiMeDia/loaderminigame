@@ -1,12 +1,36 @@
 {
-  "name": "loaderminigame",
-  "version": "0.0.1",
-  "dependencies": {},
+  "name": "jquery-loaderminigame",
+  "description": "HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.",
+  "keywords": [
+    "jquery",
+    "jquery-plugin",
+    "ecosystem:jquery",
+    "game",
+    "minigame",
+    "loading",
+    "loader",
+    "ajax"
+  ],
+  "author": "P0rnflake",
+  "license": "MIT",
+  "url": "http://github.com/P0rnflake/loaderminigame",
+  "repository": "http://github.com/P0rnflake/loaderminigame",
+  "homepage": "http://p0rnflake.github.io/loaderminigame/",
+  "main": "./dist/jquery-loaderminigame.js",
+  "version": "1.0.0",
+  "peerDependencies": {
+    "jquery": ">=1.7"
+  },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-concat": "1.0.1",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-umd": "~2.4.0"
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-qunit": "^1.2.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-umd": "~2.4.0",
+    "jshint": "^2.9.4",
+    "qunitjs": "^2.0.1"
   }
 }

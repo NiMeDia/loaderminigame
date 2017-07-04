@@ -196,14 +196,14 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
               values = values.split(',');
             var a = values[0];
             var b = values[1];
-            var c = values[2];
-            var d = values[3];
+            //var c = values[2];
+            //var d = values[3];
 
             var radians = Math.atan2(b, a);
             if ( radians < 0 ) {
               radians += (2 * Math.PI);
             }
-            var angle = Math.round( radians * (180/Math.PI));
+            angle = Math.round( radians * (180/Math.PI));
             angle = angle - 45;
             if(angle < 0) {
                 angle = 360 + angle;
@@ -215,3 +215,4 @@ function Loader(parent, config, borders, scale, animationTiming, animationDurati
 
     this.__initialize();
 }
+/*exported Loader */

@@ -2,11 +2,21 @@ module.exports = function (grunt) {
 
     var taskConfig = {
         pkg: grunt.file.readJSON('package.json'),
+        meta: {
+        banner: '/*\n' +
+            ' *  <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n' +
+            ' *  <%= pkg.description %>\n' +
+            ' *  <%= pkg.url %>\n' +
+            ' *\n' +
+            ' *  Made by <%= pkg.author %>\n' +
+            ' *  Under <%= pkg.license %> License\n' +
+            ' */\n'
+        },
         concat: {
             options: {
-                stripBanners: true,
+                stripBanners: false,
                 separator: ';\n',
-                banner: '/*!<%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                banner: '<%= meta.banner %>',
             },
             dist: {
                 files: {
@@ -27,6 +37,24 @@ module.exports = function (grunt) {
 //                ],
 //                dest: 'dist/concat-jquery.js',
 //            },
+        },
+        jshint: {
+            all: ['Gruntfile.js', 'src/**/*.js', 'tests/**/*.js'],
+            options: {
+                jshintrc: 'jshintrc.json'
+            }
+        },
+        qunit: {
+            all: ['tests/unit-tests.html']
+        },
+        uglify: {
+            scripts: {
+              src: ['dist/jquery-loaderminigame.js'],
+              dest: 'dist/jquery-loaderminigame.min.js'
+            },
+            options: {
+              banner: '<%= meta.banner %>'
+            }
         },
         umd: {
 //            all: {
@@ -59,11 +87,11 @@ module.exports = function (grunt) {
                     // optional, a template from templates subdir
                     // can be specified by name (e.g. 'umd'); if missing, the templates/umd.hbs
                     // file will be used from [libumd](https://github.com/bebraw/libumd)
-//            template: 'path/to/template.hbs',
+                    //template: 'path/to/template.hbs',
 
                     objectToExport: '$', // optional, internal object that will be exported
                     amdModuleId: 'loaderminigame', // optional, if missing the AMD module will be anonymous
-//                    globalAlias: '$', // optional, changes the name of the global variable
+                    //globalAlias: '$', // optional, changes the name of the global variable
 
                     deps: {// optional, `default` is used as a fallback for rest!
                         'default': ['$'],
@@ -93,12 +121,15 @@ module.exports = function (grunt) {
     grunt.initConfig(taskConfig);
 
     grunt.loadNpmTasks('grunt-umd');
-//    grunt.loadNpmTasks('grunt-contrib');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    grunt.registerTask('default', ['concat', 'umd', 'clean']);
+    grunt.registerTask('default', ['jshint', 'concat', 'umd', 'uglify', 'clean']);
+    grunt.registerTask('test', ['default', 'qunit']);
     grunt.registerTask('build', ['default']);
 };
 

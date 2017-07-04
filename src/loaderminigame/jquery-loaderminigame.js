@@ -1,3 +1,4 @@
+/*global LoaderMiniGame */
 $.fn.loaderminigame = function (config) {
     var $jq = this;
     var plugin = {
