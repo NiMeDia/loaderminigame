@@ -3,3 +3,4 @@
 /node_modules/
 /dist/concat-standalone.js
 /dist/concat-jquery.js
+/bower_components/
