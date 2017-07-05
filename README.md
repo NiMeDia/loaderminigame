@@ -67,6 +67,13 @@ Example:
     });
 ```
 
+## Installation
+
+### Using Bower
+```shell
+bower install jquery-loaderminigame
+```
+
 ## UMD Support
 This library is built on top of the [Universal Module Definition API](https://github.com/umdjs/umd) and can therefore be use with amd module loaders like [RequireJS](http://requirejs.org/).
 
