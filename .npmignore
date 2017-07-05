@@ -1,9 +1,0 @@
-node_modules
-demo
-tests
-src
-jshintrc.json
-.travis.yml
-bower.json
-Gruntfile.js
-.gitignore
