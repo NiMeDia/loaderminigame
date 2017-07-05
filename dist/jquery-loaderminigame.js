@@ -532,6 +532,15 @@ function LoaderMiniGame(parent, config) {
     };
 
     /**
+     * Removes the loaderminigame completely with DOM element.
+     * @returns {undefined}
+     */
+    this.remove = function() {
+        self.parent[0].loaderminigameInstance = undefined;
+        self.element.remove();
+    };
+
+    /**
      * Destroys the loaderminigame instance by fading out and removing the
      * DOM element.
      * @param {Object} options - see http://api.jquery.com/fadeout/#fadeOut-options
@@ -549,8 +558,7 @@ function LoaderMiniGame(parent, config) {
             if(userCb){
                 userCb.apply(arguments);
             }
-            self.parent[0].loaderminigameInstance = undefined;
-            self.element.remove();
+            self.remove();
         };
         self.element.fadeOut(options);
     };
