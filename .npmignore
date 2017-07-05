@@ -3,7 +3,7 @@ demo
 tests
 src
 .editorconfig
-.jshintrc
+jshintrc.json
 .travis.yml
 bower.json
 Gruntfile.js
