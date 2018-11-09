@@ -3,7 +3,7 @@ HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 
 <iframe width="100%" height="210" src="https://nimedia.github.io/loaderminigame/docs/demo/simple.html" frameborder="0"></iframe>
 
-[Docs and Demos](https://p0rnflake.github.io/loaderminigame/)
+[Docs and Demos](https://nimedia.github.io/loaderminigame/)
 
 ## Getting Started
 
@@ -22,8 +22,8 @@ HTML5 / CSS3 loading animation minigame shipped as JQuery plugin.
 ```
 
 ## Examples
- * [simple use](https://p0rnflake.github.io/loaderminigame/docs/demo/simple.html)
- * [extended use / dark theme](https://p0rnflake.github.io/loaderminigame/docs/demo/extended.html)
+ * [simple use](https://nimedia.github.io/loaderminigame/docs/demo/simple.html)
+ * [extended use / dark theme](https://nimedia.github.io/loaderminigame/docs/demo/extended.html)
 
 ## API
 
